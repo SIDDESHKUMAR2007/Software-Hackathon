@@ -1,7 +1,7 @@
 {
-  "name": "student-community-tracking-portal",
+  "name": "student-community-attendance-portal",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,16 +9,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "lucide-react": "^0.400.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.24.0"
+    "react-router-dom": "^6.23.1",
+    "lucide-react": "^0.378.0",
+    "framer-motion": "^11.2.10",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.4",
-    "vite": "^5.3.1"
+    "tailwindcss": "^3.4.3",
+    "vite": "^5.2.11"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-win32-x64-msvc": "^4.14.3",
+    "@esbuild/win32-x64": "^0.20.2"
   }
 }

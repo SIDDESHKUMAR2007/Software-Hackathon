@@ -1,51 +1,54 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  darkMode: 'class',
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
-        // Core brand — violet on navy
-        primary: {
-          DEFAULT: "#8B5CF6",
-          hover: "#7C3AED",
-          soft: "#A78BFA",
+        brand: {
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
+          900: '#312e81',
         },
-        // Surfaces
-        background: "#080B14",
-        surface: "#10162A",
-        "surface-hover": "#171F38",
-        raised: "#161C33",
-        border: "#232B47",
-        "border-soft": "#1B2138",
-        // Text
-        heading: "#EEF1F8",
-        body: "#8891AC",
-        muted: "#5D6789",
-        // Semantic
-        success: "#34D399",
-        warning: "#FBBF24",
-        danger: "#F87171",
-        info: "#60A5FA",
+        slateDark: {
+          50: '#0f172a',
+          100: '#1e293b',
+          200: '#334155',
+          300: '#475569',
+          400: '#64748b',
+          800: '#0b0f19',
+          900: '#070a11',
+        }
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-      },
-      borderRadius: {
-        lg: "10px",
-        xl: "14px",
+        sans: ['Inter', 'Outfit', 'sans-serif'],
       },
       boxShadow: {
-        card: "0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 1px 3px 0 rgba(0, 0, 0, 0.32)",
-        glow: "0 0 0 1px rgba(139, 92, 246, 0.15), 0 8px 24px -4px rgba(139, 92, 246, 0.25)",
-        panel: "0 12px 40px -8px rgba(2, 4, 12, 0.65)",
+        'glow-indigo': '0 0 25px -5px rgba(99, 102, 241, 0.3)',
+        'glow-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.3)',
+        'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.3)',
       },
-      backgroundImage: {
-        "brand-gradient": "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)",
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
       },
-      spacing: {
-        18: "72px",
+      animation: {
+        'laser-scan': 'laserScan 2s ease-in-out infinite alternate',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
+      keyframes: {
+        laserScan: {
+          '0%': { top: '5%', opacity: '0.8' },
+          '100%': { top: '92%', opacity: '0.8' },
+        }
+      }
     },
   },
   plugins: [],
-};
+}

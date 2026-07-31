@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import Sidebar from './layouts/Sidebar';
 import Navbar from './layouts/Navbar';
@@ -22,6 +22,9 @@ import CoordinatorHistoryPage from './pages/coordinator/CoordinatorHistoryPage';
 import StudentDashboardPage from './pages/student/StudentDashboardPage';
 import StudentHistoryPage from './pages/student/StudentHistoryPage';
 import StudentCertificatePage from './pages/student/StudentCertificatePage';
+
+// Chat Pages
+import CommunityChatPage from './pages/chat/CommunityChatPage';
 
 import { 
   initialCommunities, 
@@ -63,25 +66,30 @@ export default function App() {
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
+  const location = useLocation();
+  const isChat = location.pathname.endsWith('/chat');
+
   return (
     <>
       <div className="min-h-screen bg-[#080c14] text-slate-100 flex font-sans selection:bg-indigo-500 selection:text-white">
         
         {/* Reusable Sidebar */}
-        <Sidebar role={role} />
+        {!isChat && <Sidebar role={role} />}
 
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
           
           {/* Reusable Top Navbar */}
-          <Navbar
-            role={role}
-            setRole={setRole}
-            notificationsCount={unreadCount}
-            onOpenNotifications={() => setIsNotifOpen(true)}
-          />
+          {!isChat && (
+            <Navbar
+              role={role}
+              setRole={setRole}
+              notificationsCount={unreadCount}
+              onOpenNotifications={() => setIsNotifOpen(true)}
+            />
+          )}
 
           {/* Main View Area */}
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          <main className={isChat ? "flex-1 w-full h-full" : "flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto overflow-y-auto"}>
             <Routes>
               {/* ADMIN ROUTES */}
               <Route path="/admin/dashboard" element={<AdminDashboardPage students={students} events={events} records={records} settings={settings} />} />
@@ -89,24 +97,27 @@ export default function App() {
               <Route path="/admin/reports" element={<AttendanceReportsPage events={events} records={records} communities={communities} />} />
               <Route path="/admin/sessions" element={<SessionMonitorPage events={events} />} />
               <Route path="/admin/settings" element={<AttendanceSettingsPage settings={settings} onSaveSettings={handleSaveSettings} />} />
+              <Route path="/admin/chat" element={<CommunityChatPage role="admin" communities={communities} students={students} />} />
 
               {/* COORDINATOR ROUTES */}
               <Route path="/coordinator/dashboard" element={<CoordinatorDashboardPage events={events} records={records} />} />
               <Route path="/coordinator/live-session" element={<LiveSessionPage events={events} />} />
               <Route path="/coordinator/roster" element={<StudentRosterPage records={records} onUpdateRecord={handleUpdateRecord} />} />
               <Route path="/coordinator/history" element={<CoordinatorHistoryPage events={events} />} />
+              <Route path="/coordinator/chat" element={<CommunityChatPage role="coordinator" communities={communities} students={students} />} />
 
               {/* STUDENT ROUTES */}
               <Route path="/student/dashboard" element={<StudentDashboardPage student={students[0]} events={events} records={records} onScanAttendance={handleScanAttendance} />} />
               <Route path="/student/history" element={<StudentHistoryPage records={records} studentId={students[0].id} />} />
               <Route path="/student/certificates" element={<StudentCertificatePage student={students[0]} />} />
+              <Route path="/student/chat" element={<CommunityChatPage role="student" communities={communities} students={students} />} />
 
               {/* DEFAULT FALLBACK ROUTE */}
               <Route
                 path="*"
                 element={
                   <Navigate
-                    to={role === 'admin' ? '/admin/dashboard' : role === 'coordinator' ? '/coordinator/dashboard' : '/student/dashboard'}
+                    to={role === 'admin' ? '/admin/chat' : role === 'coordinator' ? '/coordinator/chat' : '/student/chat'}
                     replace
                   />
                 }
