@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collaborations · Student Community Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-900:#0B1B33;
+    --ink-700:#33455E;
+    --ink-500:#647389;
+    --ink-300:#9AA6B8;
+    --line:#E4E9F2;
+    --canvas:#F4F7FC;
+    --card:#FFFFFF;
+    --blue-700:#1948C7;
+    --blue-600:#2A5CE0;
+    --blue-500:#3E71F0;
+    --blue-100:#E7EEFE;
+    --blue-050:#F2F6FE;
+    --success-600:#1C9A6C;
+    --success-100:#E1F6EC;
+    --amber-600:#B7791F;
+    --amber-100:#FDF2DA;
+    --slate-600:#5B6B84;
+    --slate-100:#EDF1F7;
+    --red-600:#D33B4E;
+    --red-100:#FCE7EA;
+    --radius-lg:18px;
+    --radius-md:12px;
+    --radius-sm:8px;
+    --shadow-card: 0 1px 2px rgba(15,29,58,.04), 0 8px 24px -12px rgba(15,29,58,.10);
+    --shadow-pop: 0 20px 45px -18px rgba(19,44,97,.28);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--canvas);
+    color:var(--ink-900);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Lexend',sans-serif;
+  }
+  a{text-decoration:none;color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  ::selection{background:var(--blue-100);}
+
+  /* ---------- Layout shell ---------- */
+  .shell{
+    display:grid;
+    grid-template-columns:248px 1fr;
+    min-height:100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    background:linear-gradient(180deg,#0E2350 0%, #0B1B3A 100%);
+    color:#C9D6F2;
+    padding:22px 16px 20px;
+    display:flex;
+    flex-direction:column;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:6px 8px 22px;
+  }
+  .brand-mark{
+    width:34px;height:34px;border-radius:10px;
+    background:linear-gradient(135deg,var(--blue-500),#7AA0FF);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Lexend',sans-serif;font-weight:700;color:#fff;font-size:15px;
+    flex:none;
+    box-shadow:0 6px 16px -6px rgba(62,113,240,.7);
+  }
+  .brand-text{line-height:1.15;}
+  .brand-text strong{display:block;font-family:'Lexend',sans-serif;font-size:14.5px;color:#fff;font-weight:600;}
+  .brand-text span{font-size:11px;color:#7C8FBC;}
+
+  .nav-group-label{
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#5E7099;
+    padding:16px 12px 6px;
+    font-weight:600;
+  }
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:9px 12px;
+    border-radius:10px;
+    font-size:13.5px;
+    font-weight:500;
+    color:#AEBEE0;
+    margin-bottom:2px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-item svg{width:17px;height:17px;flex:none;opacity:.85;}
+  .nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+  .nav-item.active{
+    background:rgba(62,113,240,.18);
+    color:#fff;
+    box-shadow:inset 3px 0 0 var(--blue-500);
+  }
+  .nav-item.active svg{opacity:1;}
+
+  .sidebar-foot{
+    margin-top:auto;
+    padding:14px 12px;
+    border-radius:14px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .sidebar-foot p{margin:0 0 8px;font-size:12px;color:#B9C6E6;line-height:1.5;}
+  .sidebar-foot .mini-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12px;font-weight:600;color:#fff;
+    background:var(--blue-600);padding:7px 12px;border-radius:8px;border:none;
+  }
+
+  /* ---------- Main column ---------- */
+  .main{min-width:0;}
+
+  .topbar{
+    height:68px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:0 28px;
+    background:var(--card);
+    border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  .search-wrap{
+    flex:1;
+    max-width:420px;
+    position:relative;
+  }
+  .search-wrap svg{
+    position:absolute;left:13px;top:50%;transform:translateY(-50%);
+    width:16px;height:16px;color:var(--ink-300);
+  }
+  .search-wrap input{
+    width:100%;
+    padding:9.5px 14px 9.5px 36px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--canvas);
+    font-size:13.5px;
+    color:var(--ink-900);
+    outline:none;
+    transition:border-color .15s, background .15s;
+  }
+  .search-wrap input:focus{border-color:var(--blue-500);background:#fff;}
+  .search-wrap input::placeholder{color:var(--ink-300);}
+
+  .topbar-right{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .icon-btn{
+    width:36px;height:36px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--canvas);border:1px solid var(--line);
+    color:var(--ink-700);position:relative;
+  }
+  .icon-btn svg{width:17px;height:17px;}
+  .icon-btn .dot{
+    position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;
+    background:var(--red-600);border:1.5px solid #fff;
+  }
+  .profile-chip{
+    display:flex;align-items:center;gap:9px;
+    padding:5px 12px 5px 5px;
+    border-radius:30px;border:1px solid var(--line);background:var(--canvas);
+  }
+  .avatar{
+    width:30px;height:30px;border-radius:50%;
+    background:linear-gradient(135deg,#3E71F0,#7AA0FF);
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-family:'Lexend',sans-serif;font-weight:700;font-size:12px;flex:none;
+  }
+  .profile-chip .who strong{display:block;font-size:12.5px;font-weight:600;color:var(--ink-900);}
+  .profile-chip .who span{font-size:11px;color:var(--ink-500);}
+
+  /* ---------- Page ---------- */
+  .page{
+    padding:26px 28px 60px;
+    max-width:1240px;
+  }
+  .page-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:22px;
+  }
+  .page-head h1{
+    font-size:25px;font-weight:700;margin:0 0 6px;color:var(--ink-900);letter-spacing:-.01em;
+  }
+  .page-head p{margin:0;font-size:13.5px;color:var(--ink-500);}
+  .btn-primary{
+    display:inline-flex;align-items:center;gap:8px;
+    background:linear-gradient(135deg,var(--blue-600),var(--blue-700));
+    color:#fff;border:none;border-radius:11px;
+    padding:11px 18px;font-size:13.5px;font-weight:600;
+    box-shadow:0 10px 22px -10px rgba(25,72,199,.65);
+  }
+  .btn-primary svg{width:15px;height:15px;}
+
+  /* stat strip */
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:26px;
+  }
+  .stat-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:16px 18px;
+    box-shadow:var(--shadow-card);
+  }
+  .stat-card .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .stat-card .icon-badge{
+    width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  }
+  .stat-card .icon-badge svg{width:16px;height:16px;}
+  .stat-card .val{font-family:'Lexend',sans-serif;font-size:24px;font-weight:700;color:var(--ink-900);}
+  .stat-card .lbl{font-size:12px;color:var(--ink-500);margin-top:2px;}
+  .badge-blue{background:var(--blue-100);color:var(--blue-700);}
+  .badge-green{background:var(--success-100);color:var(--success-600);}
+  .badge-amber{background:var(--amber-100);color:var(--amber-600);}
+  .badge-slate{background:var(--slate-100);color:var(--slate-600);}
+
+  /* Tabs */
+  .tabs{
+    display:flex;
+    gap:4px;
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:5px;
+    border-radius:13px;
+    width:fit-content;
+    margin-bottom:22px;
+  }
+  .tab-btn{
+    border:none;background:transparent;
+    padding:9px 18px;
+    font-size:13.5px;font-weight:600;
+    color:var(--ink-500);
+    border-radius:9px;
+    display:flex;align-items:center;gap:8px;
+    transition:background .15s, color .15s;
+  }
+  .tab-btn:hover{color:var(--ink-900);}
+  .tab-btn.active{
+    background:var(--ink-900);
+    color:#fff;
+  }
+  .tab-count{
+    font-size:11px;
+    padding:1px 7px;
+    border-radius:20px;
+    background:rgba(255,255,255,.16);
+  }
+  .tab-btn:not(.active) .tab-count{background:var(--slate-100);color:var(--ink-500);}
+
+  .view-toggle{
+    display:inline-flex;gap:3px;background:var(--canvas);border:1px solid var(--line);
+    padding:3px;border-radius:9px;
+  }
+  .view-toggle button{
+    border:none;background:transparent;width:32px;height:28px;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;color:var(--ink-500);
+  }
+  .view-toggle button svg{width:15px;height:15px;}
+  .view-toggle button.active{background:#fff;color:var(--blue-600);box-shadow:0 1px 3px rgba(15,29,58,.12);}
+
+  .panel-toolbar{
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;
+  }
+  .filter-pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{
+    font-size:12.5px;font-weight:500;color:var(--ink-700);
+    background:var(--card);border:1px solid var(--line);
+    padding:7px 13px;border-radius:20px;display:flex;align-items:center;gap:6px;
+  }
+  .pill.active{background:var(--blue-050);border-color:var(--blue-500);color:var(--blue-700);font-weight:600;}
+  .pill .swatch{width:7px;height:7px;border-radius:50%;}
+
+  /* ---------- Collaboration cards ---------- */
+  .collab-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:16px;
+  }
+  .collab-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg);
+    padding:18px 18px 16px;
+    box-shadow:var(--shadow-card);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s;
+  }
+  .collab-card:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-pop);
+    border-color:#D8E2FA;
+  }
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .card-title{font-family:'Lexend',sans-serif;font-size:15.5px;font-weight:600;color:var(--ink-900);margin:0 0 4px;line-height:1.3;}
+  .card-sub{font-size:11.5px;color:var(--ink-300);text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+
+  .status-badge{
+    font-size:11px;font-weight:700;
+    padding:4px 10px;border-radius:20px;
+    display:inline-flex;align-items:center;gap:5px;
+    white-space:nowrap;
+  }
+  .status-badge::before{content:"";width:6px;height:6px;border-radius:50%;}
+  .status-Active{background:var(--success-100);color:var(--success-600);}
+  .status-Active::before{background:var(--success-600);}
+  .status-Planning{background:var(--amber-100);color:var(--amber-600);}
+  .status-Planning::before{background:var(--amber-600);}
+  .status-Completed{background:var(--blue-100);color:var(--blue-700);}
+  .status-Completed::before{background:var(--blue-700);}
+
+  /* community knot — signature element: overlapping community rings */
+  .knot{
+    display:flex;
+    align-items:center;
+  }
+  .ring{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Lexend',sans-serif;font-weight:700;font-size:12px;color:#fff;
+    border:2.5px solid #fff;
+    box-shadow:0 2px 6px rgba(15,29,58,.15);
+  }
+  .ring + .ring{margin-left:-11px;}
+  .knot-label{
+    margin-left:10px;
+    font-size:12.5px;
+    color:var(--ink-700);
+    font-weight:500;
+    line-height:1.35;
+  }
+  .knot-label b{color:var(--ink-900);font-weight:600;}
+
+  .progress-block{display:flex;flex-direction:column;gap:6px;}
+  .progress-meta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-500);font-weight:500;}
+  .progress-meta b{color:var(--ink-900);font-family:'Lexend',sans-serif;font-weight:700;font-size:12.5px;}
+  .progress-track{
+    height:7px;border-radius:20px;background:var(--slate-100);overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;border-radius:20px;
+    background:linear-gradient(90deg,var(--blue-500),var(--blue-700));
+  }
+  .progress-fill.done{background:linear-gradient(90deg,#1FB27F,var(--success-600));}
+  .progress-fill.plan{background:linear-gradient(90deg,#F0AA3E,var(--amber-600));}
+
+  .card-foot{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:12px;border-top:1px solid var(--line);
+  }
+  .card-foot .meta-line{font-size:11.5px;color:var(--ink-500);display:flex;align-items:center;gap:6px;}
+  .card-foot .meta-line svg{width:13px;height:13px;}
+  .btn-view{
+    font-size:12.5px;font-weight:600;color:var(--blue-700);
+    background:var(--blue-050);border:1px solid var(--blue-100);
+    padding:7px 14px;border-radius:9px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .btn-view svg{width:13px;height:13px;}
+  .btn-view:hover{background:var(--blue-100);}
+
+  /* ---------- Table ---------- */
+  .collab-table-wrap{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+    overflow:hidden;box-shadow:var(--shadow-card);
+  }
+  table{width:100%;border-collapse:collapse;}
+  thead th{
+    text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--ink-500);font-weight:700;background:var(--canvas);
+    padding:12px 16px;border-bottom:1px solid var(--line);
+  }
+  tbody td{
+    padding:14px 16px;font-size:13px;color:var(--ink-700);border-bottom:1px solid var(--line);vertical-align:middle;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#FAFBFF;}
+  td.name-cell b{display:block;font-family:'Lexend',sans-serif;font-size:13.5px;color:var(--ink-900);font-weight:600;}
+  .table-progress{display:flex;align-items:center;gap:8px;min-width:110px;}
+  .table-progress .progress-track{flex:1;}
+  .table-progress span{font-size:12px;font-weight:700;color:var(--ink-900);width:32px;}
+
+  /* ---------- Invitations ---------- */
+  .invite-list{display:flex;flex-direction:column;gap:14px;}
+  .invite-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+    padding:18px 20px;box-shadow:var(--shadow-card);
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    transition:border-color .15s;
+  }
+  .invite-card.decided{opacity:.55;}
+  .invite-avatar{
+    width:46px;height:46px;border-radius:14px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Lexend',sans-serif;font-weight:700;font-size:15px;color:#fff;
+  }
+  .invite-body{flex:1;min-width:220px;}
+  .invite-body .top-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+  .invite-body .top-line .from{font-size:12px;color:var(--ink-500);font-weight:600;}
+  .invite-body h3{margin:0 0 6px;font-family:'Lexend',sans-serif;font-size:15px;font-weight:600;color:var(--ink-900);}
+  .invite-body p.msg{
+    margin:0;font-size:13px;color:var(--ink-500);line-height:1.5;
+    max-width:520px;
+  }
+  .invite-date{
+    display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-300);margin-top:8px;font-weight:500;
+  }
+  .invite-date svg{width:12px;height:12px;}
+  .invite-actions{display:flex;gap:9px;flex:none;}
+  .btn-accept, .btn-reject{
+    display:flex;align-items:center;gap:6px;
+    font-size:13px;font-weight:600;border-radius:10px;padding:9px 16px;border:1px solid transparent;
+  }
+  .btn-accept{background:var(--success-600);color:#fff;box-shadow:0 8px 18px -10px rgba(28,154,108,.6);}
+  .btn-accept:hover{background:#178055;}
+  .btn-reject{background:#fff;color:var(--red-600);border-color:var(--red-100);}
+  .btn-reject:hover{background:var(--red-100);}
+  .btn-accept svg,.btn-reject svg{width:14px;height:14px;}
+  .decision-chip{
+    font-size:12px;font-weight:700;padding:7px 14px;border-radius:10px;display:flex;align-items:center;gap:6px;
+  }
+  .decision-chip.accepted{background:var(--success-100);color:var(--success-600);}
+  .decision-chip.rejected{background:var(--red-100);color:var(--red-600);}
+
+  .empty-state{
+    text-align:center;padding:60px 20px;color:var(--ink-500);
+    background:var(--card);border:1px dashed var(--line);border-radius:var(--radius-lg);
+  }
+  .empty-state svg{width:38px;height:38px;color:var(--ink-300);margin-bottom:10px;}
+  .empty-state h3{margin:0 0 4px;color:var(--ink-900);font-size:15px;}
+  .empty-state p{margin:0;font-size:13px;}
+
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:980px){
+    .shell{grid-template-columns:1fr;}
+    .sidebar{
+      position:fixed;left:-260px;top:0;width:240px;z-index:50;
+      transition:left .2s ease;box-shadow:20px 0 40px rgba(0,0,0,.25);
+    }
+    .sidebar.open{left:0;}
+    .menu-toggle{display:flex !important;}
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:640px){
+    .page{padding:18px 14px 40px;}
+    .topbar{padding:0 14px;gap:10px;}
+    .search-wrap{display:none;}
+    .stat-row{grid-template-columns:1fr 1fr;gap:10px;}
+    .collab-grid{grid-template-columns:1fr;}
+    .invite-card{flex-direction:column;align-items:flex-start;}
+    .invite-actions{width:100%;}
+    .invite-actions button{flex:1;justify-content:center;}
+    thead{display:none;}
+    table, tbody, tr, td{display:block;width:100%;}
+    tbody tr{border-bottom:1px solid var(--line);padding:10px 0;}
+    tbody td{border:none;padding:6px 16px;}
+    .table-progress{width:100%;}
+  }
+  .menu-toggle{
+    display:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);
+    background:var(--canvas);align-items:center;justify-content:center;color:var(--ink-700);flex:none;
+  }
+  .menu-toggle svg{width:18px;height:18px;}
+  .backdrop{display:none;position:fixed;inset:0;background:rgba(10,20,40,.4);z-index:40;}
+  .backdrop.show{display:block;}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">CN</div>
+      <div class="brand-text">
+        <strong>CampusNet</strong>
+        <span>Community Portal</span>
+      </div>
+    </div>
+
+    <div class="nav-group-label">Workspace</div>
+    <a class="nav-item active" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="4"/><circle cx="16" cy="16" r="4"/><path d="M11 11l2 2"/></svg>
+      Collaborations
+    </a>
+
+    <div class="sidebar-foot">
+      <p>Coding Club has 3 active collaborations this term.</p>
+      <button class="mini-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        New collaboration
+      </button>
+    </div>
+  </aside>
+
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search collaborations, communities, people…">
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" title="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="profile-chip">
+          <div class="avatar">RA</div>
+          <div class="who">
+            <strong>Riya Anand</strong>
+            <span>Coding Club</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+
+      <div class="page-head">
+        <div>
+          <h1>Collaborations</h1>
+          <p>Track joint initiatives across every community, from kickoff to wrap-up.</p>
+        </div>
+        <button class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Propose collaboration
+        </button>
+      </div>
+
+      <!-- Stat strip -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="top-row">
+            <span class="lbl">Total collaborations</span>
+            <div class="icon-badge badge-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="4"/><circle cx="16" cy="16" r="4"/></svg></div>
+          </div>
+          <div class="val">6</div>
+        </div>
+        <div class="stat-card">
+          <div class="top-row">
+            <span class="lbl">Active now</span>
+            <div class="icon-badge badge-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+          </div>
+          <div class="val">3</div>
+        </div>
+        <div class="stat-card">
+          <div class="top-row">
+            <span class="lbl">In planning</span>
+            <div class="icon-badge badge-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          </div>
+          <div class="val">2</div>
+        </div>
+        <div class="stat-card">
+          <div class="top-row">
+            <span class="lbl">Pending invitations</span>
+            <div class="icon-badge badge-slate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8V7l-3 2-6-4-6 4-3-2v1l9 6z"/><rect x="3" y="7" width="18" height="12" rx="2"/></svg></div>
+          </div>
+          <div class="val">3</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="panel-toolbar">
+        <div class="tabs" id="tabs">
+          <button class="tab-btn active" data-tab="all">All Collaborations <span class="tab-count">6</span></button>
+          <button class="tab-btn" data-tab="mine">My Collaborations <span class="tab-count">3</span></button>
+          <button class="tab-btn" data-tab="invites">Invitations <span class="tab-count" id="inviteCount">3</span></button>
+        </div>
+        <div class="view-toggle" id="viewToggle">
+          <button class="active" data-view="grid" title="Card view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </button>
+          <button data-view="table" title="Table view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== TAB: ALL COLLABORATIONS ===== -->
+      <section class="tab-panel active" id="panel-all">
+        <div class="filter-pills">
+          <span class="pill active">All statuses</span>
+          <span class="pill"><span class="swatch" style="background:var(--success-600)"></span>Active</span>
+          <span class="pill"><span class="swatch" style="background:var(--amber-600)"></span>Planning</span>
+          <span class="pill"><span class="swatch" style="background:var(--blue-700)"></span>Completed</span>
+        </div>
+
+        <div class="collab-grid" id="allGrid"></div>
+
+        <div class="collab-table-wrap" id="allTable" style="display:none;">
+          <table>
+            <thead>
+              <tr><th>Collaboration</th><th>Participating communities</th><th>Status</th><th>Progress</th><th></th></tr>
+            </thead>
+            <tbody id="allTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== TAB: MY COLLABORATIONS ===== -->
+      <section class="tab-panel" id="panel-mine">
+        <div class="filter-pills">
+          <span class="pill active"><span class="swatch" style="background:var(--blue-600)"></span>Coding Club</span>
+        </div>
+        <div class="collab-grid" id="mineGrid"></div>
+      </section>
+
+      <!-- ===== TAB: INVITATIONS ===== -->
+      <section class="tab-panel" id="panel-invites">
+        <div class="invite-list" id="inviteList"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/* ---------------- Data ---------------- */
+const communities = {
+  "Coding Club":   { initials:"CC", color:"#2A5CE0" },
+  "Robotics Club": { initials:"RC", color:"#0EA5A0" },
+  "AI Club":       { initials:"AI", color:"#8B5CF6" },
+  "Tech Club":     { initials:"TC", color:"#F0AA3E" },
+  "Design Club":   { initials:"DS", color:"#EC6BA5" },
+  "Business Club": { initials:"BC", color:"#EF6A5D" },
+};
+
+const myCommunity = "Coding Club";
+
+const collaborations = [
+  { name:"Hackathon 2026", communities:["Coding Club","Robotics Club"], status:"Active", progress:70, updated:"Updated 2 days ago" },
+  { name:"AI Workshop", communities:["Coding Club","AI Club"], status:"Active", progress:50, updated:"Updated 4 days ago" },
+  { name:"Tech Expo", communities:["Robotics Club","Tech Club"], status:"Planning", progress:20, updated:"Updated 1 week ago" },
+  { name:"Design Sprint", communities:["Design Club","Coding Club"], status:"Completed", progress:100, updated:"Wrapped up last month" },
+  { name:"Startup Pitch Night", communities:["Business Club","Tech Club"], status:"Planning", progress:10, updated:"Updated yesterday" },
+  { name:"Robotics Bootcamp", communities:["Robotics Club","AI Club"], status:"Active", progress:60, updated:"Updated 3 days ago" },
+];
+
+const invitations = [
+  { from:"AI Club", name:"Neural Nets Challenge", message:"We'd love to team up with Coding Club on a two-week neural networks challenge for first-year students — you'd lead the coding tracks.", date:"July 28, 2026" },
+  { from:"Business Club", name:"Pitch & Code", message:"Looking for a technical partner to help student founders turn pitch decks into working demos over a single weekend.", date:"July 26, 2026" },
+  { from:"Tech Club", name:"Expo Prep Meetup", message:"Inviting Coding Club to co-host a prep session ahead of Tech Expo, covering booth demos and live coding stations.", date:"July 24, 2026" },
+];
+
+/* ---------------- Helpers ---------------- */
+function progressClass(status){
+  if(status === "Completed") return "done";
+  if(status === "Planning") return "plan";
+  return "";
+}
+
+function knotHTML(names){
+  const rings = names.map(n => {
+    const c = communities[n];
+    return `<div class="ring" style="background:${c.color}" title="${n}">${c.initials}</div>`;
+  }).join("");
+  return `
+    <div class="knot">
+      ${rings}
+      <div class="knot-label">${names.map(n=>`<b>${n}</b>`).join(" &nbsp;+&nbsp; ")}</div>
+    </div>`;
+}
+
+function cardHTML(c){
+  return `
+  <div class="collab-card">
+    <div class="card-top">
+      <div>
+        <div class="card-sub">Collaboration</div>
+        <h3 class="card-title">${c.name}</h3>
+      </div>
+      <span class="status-badge status-${c.status}">${c.status}</span>
+    </div>
+
+    ${knotHTML(c.communities)}
+
+    <div class="progress-block">
+      <div class="progress-meta"><span>Progress</span><b>${c.progress}%</b></div>
+      <div class="progress-track"><div class="progress-fill ${progressClass(c.status)}" style="width:${c.progress}%"></div></div>
+    </div>
+
+    <div class="card-foot">
+      <div class="meta-line">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        ${c.updated}
+      </div>
+      <button class="btn-view">
+        View details
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>`;
+}
+
+function tableRowHTML(c){
+  const chips = c.communities.map(n=>{
+    const cm = communities[n];
+    return `<div class="ring" style="width:26px;height:26px;font-size:10px;background:${cm.color}" title="${n}">${cm.initials}</div>`;
+  }).join("");
+  return `
+  <tr>
+    <td class="name-cell"><b>${c.name}</b></td>
+    <td>
+      <div style="display:flex;align-items:center;">
+        <div class="knot" style="gap:0;">${chips}</div>
+        <span style="margin-left:10px;font-size:12.5px;color:var(--ink-500);">${c.communities.join(" + ")}</span>
+      </div>
+    </td>
+    <td><span class="status-badge status-${c.status}">${c.status}</span></td>
+    <td>
+      <div class="table-progress">
+        <div class="progress-track"><div class="progress-fill ${progressClass(c.status)}" style="width:${c.progress}%"></div></div>
+        <span>${c.progress}%</span>
+      </div>
+    </td>
+    <td><button class="btn-view">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></td>
+  </tr>`;
+}
+
+function inviteHTML(inv, idx){
+  const c = communities[inv.from];
+  return `
+  <div class="invite-card" id="invite-${idx}">
+    <div class="invite-avatar" style="background:${c.color}">${c.initials}</div>
+    <div class="invite-body">
+      <div class="top-line"><span class="from">${inv.from}</span><span style="color:var(--ink-300);">wants to collaborate on</span></div>
+      <h3>${inv.name}</h3>
+      <p class="msg">${inv.message}</p>
+      <div class="invite-date">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Received ${inv.date}
+      </div>
+    </div>
+    <div class="invite-actions" id="invite-actions-${idx}">
+      <button class="btn-accept" onclick="decide(${idx}, true)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        Accept
+      </button>
+      <button class="btn-reject" onclick="decide(${idx}, false)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        Reject
+      </button>
+    </div>
+  </div>`;
+}
+
+/* ---------------- Render ---------------- */
+function renderAll(){
+  document.getElementById('allGrid').innerHTML = collaborations.map(cardHTML).join("");
+  document.getElementById('allTableBody').innerHTML = collaborations.map(tableRowHTML).join("");
+}
+function renderMine(){
+  const mine = collaborations.filter(c => c.communities.includes(myCommunity));
+  const grid = document.getElementById('mineGrid');
+  grid.innerHTML = mine.length ? mine.map(cardHTML).join("") : emptyState("No collaborations yet", "Once Coding Club joins a collaboration, it will show up here.");
+}
+function renderInvites(){
+  const list = document.getElementById('inviteList');
+  list.innerHTML = invitations.map(inviteHTML).join("");
+}
+function emptyState(title, sub){
+  return `<div class="empty-state" style="grid-column:1/-1;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="4"/><circle cx="16" cy="16" r="4"/></svg>
+    <h3>${title}</h3><p>${sub}</p>
+  </div>`;
+}
+
+renderAll();
+renderMine();
+renderInvites();
+
+/* ---------------- Interactions ---------------- */
+function decide(idx, accepted){
+  const card = document.getElementById(`invite-${idx}`);
+  const actions = document.getElementById(`invite-actions-${idx}`);
+  card.classList.add('decided');
+  actions.innerHTML = accepted
+    ? `<span class="decision-chip accepted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px;"><path d="M20 6L9 17l-5-5"/></svg>Accepted</span>`
+    : `<span class="decision-chip rejected"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px;"><path d="M18 6L6 18M6 6l12 12"/></svg>Declined</span>`;
+
+  const remaining = document.querySelectorAll('.invite-card:not(.decided)').length;
+  document.getElementById('inviteCount').textContent = remaining;
+}
+
+/* Tabs */
+document.getElementById('tabs').addEventListener('click', e=>{
+  const btn = e.target.closest('.tab-btn');
+  if(!btn) return;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-' + (btn.dataset.tab === 'mine' ? 'mine' : btn.dataset.tab)).classList.add('active');
+  document.getElementById('viewToggle').style.display = btn.dataset.tab === 'all' ? 'inline-flex' : 'none';
+});
+
+/* View toggle (grid / table) — only for All tab */
+document.getElementById('viewToggle').addEventListener('click', e=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  document.querySelectorAll('#viewToggle button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const isGrid = btn.dataset.view === 'grid';
+  document.getElementById('allGrid').style.display = isGrid ? 'grid' : 'none';
+  document.getElementById('allTable').style.display = isGrid ? 'none' : 'block';
+});
+
+/* Filter pills (All tab) */
+document.querySelectorAll('#panel-all .filter-pills .pill').forEach(pill=>{
+  pill.addEventListener('click', ()=>{
+    document.querySelectorAll('#panel-all .filter-pills .pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    const label = pill.textContent.trim();
+    const filtered = label === 'All statuses' ? collaborations : collaborations.filter(c=>c.status===label);
+    document.getElementById('allGrid').innerHTML = filtered.length ? filtered.map(cardHTML).join("") : emptyState("No matches", "Try a different status filter.");
+    document.getElementById('allTableBody').innerHTML = filtered.map(tableRowHTML).join("");
+  });
+});
+
+/* Mobile sidebar */
+const sidebar = document.getElementById('sidebar');
+const backdrop = document.getElementById('backdrop');
+document.getElementById('menuToggle').addEventListener('click', ()=>{
+  sidebar.classList.add('open');
+  backdrop.classList.add('show');
+});
+backdrop.addEventListener('click', ()=>{
+  sidebar.classList.remove('open');
+  backdrop.classList.remove('show');
+});
+</script>
+</body>
+</html>
